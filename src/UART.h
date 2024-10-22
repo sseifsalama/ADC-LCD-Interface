@@ -1,19 +1,15 @@
-//Header file for all UART functions
-#ifndef __UART__
-#define __UART__
+// Include Guard to avoid multiple inclusion
+#ifndef _uart_
+#define _uart_
 
-void Uart_Init(void);
+#define BUFFER_SIZE 16
 
-void SetBaudRate(unsigned short BuadRate);
-
-void Uart_SendChar(unsigned char DataByte);
-
-unsigned char Uart_ReadChar();
-
-unsigned int Uart_ReadInt(void);
-
-void Uart_SendString(const char *String);
-
-char Uart_ReadString(char *string, int maxSize);
-
+// Function Declarations
+void UART_SetBaudRate(uint32_t baud_rate);
+void UART_Init(uint32_t baud_rate);
+void UART_SendChar(unsigned char data);
+void UART_SendString(char* string);
+char UART_Receive();
+void UART_ReceiveString(char* buffer, uint16_t bufferSize);
+unsigned int UART_ReadInt(void);
 #endif
