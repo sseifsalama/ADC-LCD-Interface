@@ -1,6 +1,7 @@
-#include <avr/iom328p.h>
+
 #include <avr/interrupt.h>
 #include "uart.h"
+
 
 void UART_SetBaudRate(uint32_t baud_rate){
   uint16_t ubrr = F_CPU / ((baud_rate*16) - 1); // Baud rate formula
@@ -60,6 +61,7 @@ void UART_ReceiveString(char* buffer, uint16_t bufferSize) {
 
 // UART RX interrupt
 ISR(USART_RX_vect) {
+    
     char receivedChar = UDR0;  // Read recieved charachter
 
     // Store received character in buffer

@@ -1,9 +1,6 @@
-#include <avr/io.h>			  /* Include AVR std. library file */
+#include "dio.h"			  /* Include AVR std. library file */
 #include <util/delay.h>	  /* Include Delay header file */
 #include "LCD.h"
-#if !defined(__AVR_ATmega328P__)
-#include <avr/iom328p.h>
-#endif
 
 #define LCD_Dir  DDRD			/* Define LCD data port direction */
 #define LCD_Port PORTD		/* Define LCD data port */
@@ -17,6 +14,7 @@
 
 void LCD_Send( unsigned char data,unsigned char mode )
 {
+  
 	LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); /* sending upper nibble */
   if(mode == MODE_DATA){
     RS_EN_Port |= (1<<RS);
