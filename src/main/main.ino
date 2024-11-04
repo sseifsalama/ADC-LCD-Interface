@@ -27,10 +27,30 @@ int main(void) {
  
  LCD_Send(0x0E,MODE_COMMAND);
  while (1) {
+
+   //Low limit value to be changed by pushbutton
+   int llm = 321;
+   char sllm[5];
+
+   //High limit value to be changed by pushbutton
+   int hhm = 700;
+   char shhm[5]; 
+
+
+ 
    LCD_String("Pot:");
-   LCD_String_xy(1,0,"LLM:200");
    LCD_String_xy(0,4,buffer);
-   LCD_String_xy(1,9,"HHM:500");
+
+
+   //Low limit print on LCD
+   LCD_String_xy(1,0,"LLM:");
+   itoa(llm, sllm, 10);
+   LCD_String_xy(1,4,sllm);
+
+   //High limit print on LCD
+   LCD_String_xy(1,9,"HHM:");
+   itoa(hhm, shhm, 10);
+   LCD_String_xy(1,13,shhm);
    
    adc_reading = Adc_ReadChannel(0);
    itoa(adc_reading, buffer, 10);
