@@ -34,7 +34,10 @@ void LCD_Send( unsigned char data,unsigned char mode )
 	RS_EN_Port &= ~ (1<<EN);
 	_delay_ms(2);
 }
-
+void LCD_DecrementCursor(void){
+  LCD_Send (0x10,MODE_COMMAND);		/* Move Cursor to the left  */
+	_delay_ms(1000);
+}
 void LCD_Init (void)			/* LCD Initialize function */
 {
 	LCD_Dir = 0xFF;			    /* Make LCD port direction as o/p */
