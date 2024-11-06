@@ -19,7 +19,7 @@ Test Cases are developed in Robot Framework Test steps
 ## 4. Bill of Materials (BOM)
 
 **BOM**
-[bom_file](./bom/bom.csv)
+[bom_file](./bom/BOM.csv)
 
 **Optimized BOM**
 [optimized_bom_file](./bom/optimized_bom.csv)
