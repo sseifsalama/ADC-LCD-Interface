@@ -4,29 +4,21 @@
 #include "adc.h"
 #include "dio.h"
 #include "uart.h"
+#include "keypad.h"
 #include <stdlib.h>
-//Maximum buffer size for commands sent to UART
-#define MAX_SIZE 100
 
-
- unsigned short adc_reading;
-volatile char receivedCommand[BUFFER_SIZE];  // Shared buffer for received commands
-volatile uint8_t commandIndex = 0;  // Index for command buffer
-volatile int rx_flag = 0;  // Flag indicating a command has been received
+unsigned short adc_reading;
 unsigned char buffer[4];
-//Initialization Function
-void init() {
-    LCD_Init();
-    UART_Init(9600);
-    Adc_Init();
-}
 
 int main(void) {
-  init();
- UART_SendString("asmdsadas");
+  dio_init();
+  LCD_Init();
+  UART_Init(9600);
+  Adc_Init();
+  UART_SendString("asmdsadas");
  
- LCD_Send(0x0E,MODE_COMMAND);
- while (1) {
+  LCD_Send(0x0E,MODE_COMMAND);
+  while (1) {
 
    //Low limit value to be changed by pushbutton
    int llm = 321;
@@ -35,8 +27,6 @@ int main(void) {
    //High limit value to be changed by pushbutton
    int hhm = 700;
    char shhm[5]; 
-
-
  
    LCD_String("Pot:");
    LCD_String_xy(0,4,buffer);
