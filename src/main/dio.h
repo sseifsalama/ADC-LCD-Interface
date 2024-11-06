@@ -4,6 +4,7 @@
 
 #define PORTD  (*(volatile unsigned char*)0x2B)
 #define DDRD  (*(volatile unsigned char*)0x2A)
+#define PIND (*(volatile unsigned char*)0x29)
 
 #define PD0 0
 #define PD1 1
@@ -16,24 +17,27 @@
 
 #define PORTB (*(volatile unsigned char*)0x25)
 #define DDRB (*(volatile unsigned char*)0x24)
+#define PINB (*(volatile unsigned char*)0x23)
 
-#define PB0 0
-#define PB1 1
-#define PB2 2
-#define PB3 3
-#define PB4 4
-#define PB5 5
+// keypad pins
+#define ROW1_PIN 0
+#define ROW2_PIN 1
+#define ROW3_PIN 2
+#define COL1_PIN 3
+#define COL2_PIN 4
+#define COL3_PIN 5
 
 #define DIO_INPUT 0
 #define DIO_OUTPUT 1
+#define DIO_INPUT_PULLUP 2
 
 #define LOW 0
 #define HIGH 1
 
 // Function Declarations
-
+void dio_init(void);
 void Set_PIN_Direction(volatile uint8_t* ddr, uint8_t pin, uint8_t direction);
 void Set_PIN_State(volatile uint8_t* port, uint8_t pin, uint8_t state);
-void dio_init(void);
+uint8_t Is_Button_Pressed(volatile uint8_t* pin_reg, uint8_t pin);
 
 #endif
