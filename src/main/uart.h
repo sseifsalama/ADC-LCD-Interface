@@ -4,7 +4,6 @@
 
 #define BUFFER_SIZE 16
 
-
 #define UCSR0A  (*(volatile unsigned char*)0xC0)
 
 #define UDRE0 5
@@ -25,6 +24,9 @@
 #define UBRR0H  (*(volatile unsigned char*)0xC5) 
 #define UDR0  (*(volatile unsigned char*)0xC6)
 
+volatile char receivedCommand[BUFFER_SIZE];  // Shared buffer for received commands
+volatile uint8_t commandIndex = 0;  // Index for command buffer
+volatile int rx_flag = 0;  // Flag indicating a command has been received
 
 // Function Declarations
 void UART_SetBaudRate(uint32_t baud_rate);
