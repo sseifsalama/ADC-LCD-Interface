@@ -6,10 +6,10 @@
 ## 2. Project Code
 
 **GitHub Repository:**
-[submission_repo](https://github.com/MoSaeedHammad/coventry_egypt_embedded_systems_2024)
+[submission_repo](https://github.com/sseifsalama/Embedded-Project-2)
 
 **Local Root Directory**
-[link_to_local_root_directory](./code/)
+[link_to_local_root_directory](./src/main)
 
 ## 3. Test Cases
 
