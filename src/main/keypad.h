@@ -8,6 +8,8 @@ const char key_map[3][3] = {
     {'7', '8', '9'}
 };
 
+char key;
+
 char keypad_get_key(void);
 
 #endif
