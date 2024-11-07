@@ -9,17 +9,34 @@
 
 unsigned short adc_reading;
 unsigned char buffer[4];
-
-int main(void) {
+void init(){
   dio_init();
   LCD_Init();
   UART_Init(9600);
   Adc_Init();
-  UART_SendString("asmdsadas");
- 
-  LCD_Send(0x0E,MODE_COMMAND);
-  while (1) {
 
+}
+int main(void) {
+  init();
+ 
+ 
+  while (1) {
+   LCD_Send(0x0E,MODE_COMMAND);
+   LCD_String("Analog Sensors");
+   LCD_Send(0xC0,MODE_COMMAND);
+   LCD_String("1:POT  2:LDR");
+   Set_PIN_State(&PORTC,PC3,HIGH);
+
+   while(key == '\0'){
+    key = keypad_get_key();
+   }
+   LCD_Clear();
+   if(key == 1){
+     adc_reading = Adc_ReadChannel(1);
+   }else if(key == 2){
+    adc_reading = Adc_ReadChannel(0);
+   }
+   while(key != 8){
    //Low limit value to be changed by pushbutton
    int llm = 321;
    char sllm[5];
@@ -42,7 +59,7 @@ int main(void) {
    itoa(hhm, shhm, 10);
    LCD_String_xy(1,13,shhm);
    
-   adc_reading = Adc_ReadChannel(0);
+   
    itoa(adc_reading, buffer, 10);
    if(adc_reading > 200 && adc_reading < 500){
     LCD_String_xy(0,13,"OK");
@@ -52,14 +69,14 @@ int main(void) {
    UART_SendString(buffer);
    UART_SendChar('\n');
    LCD_String_xy(0,4,buffer);
-
+   
    
    _delay_ms(300);
    
    LCD_Clear();
-   
-   
- } /* End event loop */
+   }
+  }
+  /* End event loop */
  return (0);
 }
 
