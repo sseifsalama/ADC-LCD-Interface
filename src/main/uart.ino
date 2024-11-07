@@ -1,44 +1,43 @@
 #include <avr/interrupt.h>
 #include "uart.h"
 
-
-void UART_SetBaudRate(uint32_t baud_rate){
-  uint16_t ubrr = F_CPU / ((baud_rate*16) - 1); // Baud rate formula
-  UBRR0H = (ubrr >> 8);
-  UBRR0L = ubrr;
+void UART_SetBaudRate(uint32_t baud_rate) {
+    uint16_t ubrr = F_CPU / ((baud_rate*16) - 1); // Baud rate formula
+    UBRR0H = (ubrr >> 8);
+    UBRR0L = ubrr;
 }
 
-void UART_Init(uint32_t baud_rate){
-  UART_SetBaudRate(baud_rate);
-  UCSR0B |= (1 << RXEN0) | (1 << TXEN0); // Enable uart tx and rx
-  UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set to 8-bit mode
-  UCSR0B |= (1 << RXCIE0); // Enable rx interrupt
+void UART_Init(uint32_t baud_rate) {
+    UART_SetBaudRate(baud_rate);
+    UCSR0B |= (1 << RXEN0) | (1 << TXEN0); // Enable uart tx and rx
+    UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00); // Set to 8-bit mode
+    UCSR0B |= (1 << RXCIE0); // Enable rx interrupt
 }
 
-void UART_SendChar(unsigned char data){
-  while (!(UCSR0A & ( 1 << UDRE0))); // Wait until Buffer is empty
+void UART_SendChar(unsigned char data) {
+    while (!(UCSR0A & ( 1 << UDRE0))); // Wait until Buffer is empty
     UDR0 = data; 
 }
 
-void UART_SendString(char* string){
-  int i = 0;
-  while(string[i]) { 
-    UART_SendChar(string[i++]); // Loop until string ends
-  }
+void UART_SendString(char* string) {
+    int i = 0;
+        while(string[i]) { 
+            UART_SendChar(string[i++]); // Loop until string ends
+        }
 }
 
-char UART_Receive(){
-  while((UCSR0A & (1 << RXC0)) == 0); // Wait until data is received
-  return UDR0;
+char UART_Receive() {
+    while((UCSR0A & (1 << RXC0)) == 0); // Wait until data is received
+    return UDR0;
 }
 
-unsigned int UART_ReadInt(void){
-   unsigned int value = 0;
-   while ( ! (UCSR0A & ( 1 << RXC0)) );  //Int is 16 bits so value is shifted to store it
-   value = UDR0; // Store in first 8 bits
-   value <<= 8;
-   value |= UDR0; // Store in 8 lower bits
-   return value;
+unsigned int UART_ReadInt(void) {
+    unsigned int value = 0;
+    while ( ! (UCSR0A & ( 1 << RXC0)) );  //Int is 16 bits so value is shifted to store it
+    value = UDR0; // Store in first 8 bits
+    value <<= 8;
+    value |= UDR0; // Store in 8 lower bits
+    return value;
 }
 
 
@@ -59,8 +58,7 @@ void UART_ReceiveString(char* buffer, uint16_t bufferSize) {
 }
 
 // UART RX interrupt
-ISR(USART_RX_vect) {
-    
+ISR(USART_RX_vect) { 
     char receivedChar = UDR0;  // Read recieved charachter
 
     // Store received character in buffer

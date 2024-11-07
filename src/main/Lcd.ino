@@ -1,19 +1,8 @@
 #include "dio.h"			  /* Include AVR std. library file */
 #include <util/delay.h>	  /* Include Delay header file */
-#include "LCD.h"
+#include "LCD.h"		    
 
-#define LCD_Dir  DDRD			/* Define LCD data port direction */
-#define LCD_Port PORTD		/* Define LCD data port */
-
-#define RS_EN_Dir  DDRD 	/* Define RS and En data port direction */
-#define RS_EN_Port PORTD  /* Define RS and En port */
-#define RS PD3				    /* Define Register Select pin */
-#define EN PD2 				    /* Define Enable signal pin */
-
-
-
-void LCD_Send( unsigned char data,unsigned char mode )
-{
+void LCD_Send( unsigned char data,unsigned char mode ) {
   
 	LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); /* sending upper nibble */
   if(mode == MODE_DATA){
@@ -34,12 +23,13 @@ void LCD_Send( unsigned char data,unsigned char mode )
 	RS_EN_Port &= ~ (1<<EN);
 	_delay_ms(2);
 }
+
 void LCD_DecrementCursor(void){
   LCD_Send (0x10,MODE_COMMAND);		/* Move Cursor to the left  */
 	_delay_ms(1000);
 }
-void LCD_Init (void)			/* LCD Initialize function */
-{
+
+void LCD_Init (void) {
 	LCD_Dir = 0xFF;			    /* Make LCD port direction as o/p */
   	RS_EN_Dir |= (1 << EN) | (1 << RS);
 
@@ -53,8 +43,7 @@ void LCD_Init (void)			/* LCD Initialize function */
 	_delay_ms(2);
 }
 
-void LCD_String (char *str)		/* Send string to LCD function */
-{
+void LCD_String (char *str) {
 	int i;
 	for(i=0;str[i]!=0;i++)		/* Send each char of string till the NULL */
 	{
@@ -62,8 +51,7 @@ void LCD_String (char *str)		/* Send string to LCD function */
 	}
 }
 
-void LCD_String_xy (char row, char pos, char *str)	/* Send string to LCD with xy position */
-{
+void LCD_String_xy (char row, char pos, char *str) {
 	if (row == 0 && pos<16)
 	  LCD_Send((pos & 0x0F)|0x80,MODE_COMMAND);	                  /* Command of first row and required position<16 */
 	else if (row == 1 && pos<16)
@@ -72,8 +60,7 @@ void LCD_String_xy (char row, char pos, char *str)	/* Send string to LCD with xy
 	LCD_String(str);	                              	/* Call LCD string function */
 }
 
-void LCD_Clear()
-{
+void LCD_Clear() {
 	LCD_Send (0x01,MODE_COMMAND);		/* Clear display */
 	_delay_ms(2);
 	LCD_Send (0x80,MODE_COMMAND);		/* Cursor at home position */

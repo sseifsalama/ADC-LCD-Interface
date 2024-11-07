@@ -1,3 +1,4 @@
+// Include Guard to avoid multiple inclusion
 #ifndef __adc__
 #define __adc__
 

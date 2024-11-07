@@ -1,3 +1,4 @@
+// Include Guard to avoid multiple inclusion
 #ifndef __keypad__
 #define __keypad__
 

@@ -6,10 +6,17 @@
 #define DDRD  (*(volatile unsigned char*)0x2A)
 #define PIND (*(volatile unsigned char*)0x29)
 
+// LCD Pins Port
+#define LCD_Dir  DDRD
+#define LCD_Port PORTD
+#define RS_EN_Dir  DDRD
+#define RS_EN_Port PORTD
+
+// Pins (PORTD)
 #define PD0 0
 #define PD1 1
-#define PD2 2
-#define PD3 3
+#define EN 2
+#define RS 3
 #define PD4 4
 #define PD5 5
 #define PD6 6
@@ -19,7 +26,7 @@
 #define DDRB (*(volatile unsigned char*)0x24)
 #define PINB (*(volatile unsigned char*)0x23)
 
-// keypad pins
+// Keypad Pins (PORTB)
 #define ROW1_PIN 0
 #define ROW2_PIN 1
 #define ROW3_PIN 2
@@ -31,6 +38,7 @@
 #define DDRC (*(volatile unsigned char*)0x27)
 #define PINC (*(volatile unsigned char*)0x26)
 
+// Pins (PORTC)
 #define PC0 0
 #define PC1 1
 #define PC2 2
