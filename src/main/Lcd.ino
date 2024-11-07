@@ -16,7 +16,7 @@ void LCD_Send( unsigned char data,unsigned char mode ) {
 	_delay_us(1);
 	RS_EN_Port &= ~ (1<<EN);
 
-	delay_us(200);
+	_delay_us(200);
 
 	LCD_Port = (LCD_Port & 0x0F) | (data << 4); // sending lower nibble
 	RS_EN_Port |= (1<<EN);
