@@ -3,43 +3,43 @@
 #include <util/delay.h>
 
 void LCD_Send( unsigned char data,unsigned char mode ) {
-
-	  LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
-    if(mode == MODE_DATA){
+    
+    LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
+    if (mode == MODE_DATA) {
         RS_EN_Port |= (1<<RS);
     }
-    else if(mode == MODE_COMMAND){
+    else if (mode == MODE_COMMAND) {
         RS_EN_Port &= ~ (1<<RS);
     }
 
-	  RS_EN_Port|= (1<<EN);
-	  _delay_us(1);
-	  RS_EN_Port &= ~ (1<<EN);
+	RS_EN_Port|= (1<<EN);
+	_delay_us(1);
+	RS_EN_Port &= ~ (1<<EN);
 
-	  _delay_us(200);
+	delay_us(200);
 
-	  LCD_Port = (LCD_Port & 0x0F) | (data << 4); // sending lower nibble
-	  RS_EN_Port |= (1<<EN);
-	  _delay_us(1);
-	  RS_EN_Port &= ~ (1<<EN);
-	  _delay_ms(2);
+	LCD_Port = (LCD_Port & 0x0F) | (data << 4); // sending lower nibble
+	RS_EN_Port |= (1<<EN);
+	_delay_us(1);
+	RS_EN_Port &= ~ (1<<EN);
+	_delay_ms(2);
 }
 
 void LCD_DecrementCursor(void){
     LCD_Send (0x10,MODE_COMMAND);		// Move Cursor to the left
-	  _delay_ms(1000);
+	_delay_ms(1000);
 }
 
 void LCD_Init (void) {
-	  _delay_ms(20);			    /* LCD Power ON delay always >15ms */
+	_delay_ms(20);			    /* LCD Power ON delay always >15ms */
 
-	  LCD_Send(0x02,MODE_COMMAND);		  // send for 4 bit initialization of LCD
-	  LCD_Send(0x28,MODE_COMMAND);      // 2 line, 5*7 matrix in 4-bit mode
-	  LCD_Send(0x0c,MODE_COMMAND);      // Display on cursor off
-	  LCD_Send(0x06,MODE_COMMAND);      // Increment cursor (shift cursor to right)
-	  LCD_Send(0x01,MODE_COMMAND);      // Clear display screen
+	LCD_Send(0x02,MODE_COMMAND);		  // send for 4 bit initialization of LCD
+	LCD_Send(0x28,MODE_COMMAND);      // 2 line, 5*7 matrix in 4-bit mode
+	LCD_Send(0x0c,MODE_COMMAND);      // Display on cursor off
+	LCD_Send(0x06,MODE_COMMAND);      // Increment cursor (shift cursor to right)
+	LCD_Send(0x01,MODE_COMMAND);      // Clear display screen
 
-	  _delay_ms(2);
+	_delay_ms(2);
 }
 
 void LCD_String (char *str) {
