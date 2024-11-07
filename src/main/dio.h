@@ -27,6 +27,17 @@
 #define COL2_PIN 4
 #define COL3_PIN 5
 
+#define PORTC (*(volatile unsigned char*)0x28)
+#define DDRC (*(volatile unsigned char*)0x27)
+#define PINC (*(volatile unsigned char*)0x26)
+
+#define PC0 0
+#define PC1 1
+#define PC2 2
+#define PC3 3
+#define PC4 4
+#define PC5 5
+
 #define DIO_INPUT 0
 #define DIO_OUTPUT 1
 #define DIO_INPUT_PULLUP 2
