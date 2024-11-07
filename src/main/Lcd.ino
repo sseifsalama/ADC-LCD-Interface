@@ -6,27 +6,27 @@ void LCD_Send( unsigned char data,unsigned char mode ) {
     
     LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
     if (mode == MODE_DATA) {
-        RS_EN_Port |= (1<<RS);
+        Set_PIN_State(&RS_EN_Port, RS, HIGH);
     }
     else if (mode == MODE_COMMAND) {
-        RS_EN_Port &= ~ (1<<RS);
+        Set_PIN_State(&RS_EN_Port, RS, LOW);
     }
 
-	RS_EN_Port|= (1<<EN);
+	Set_PIN_State(&RS_EN_Port, EN, HIGH);
 	_delay_us(1);
-	RS_EN_Port &= ~ (1<<EN);
+	Set_PIN_State(&RS_EN_Port, EN, LOW);
 
 	_delay_us(200);
 
 	LCD_Port = (LCD_Port & 0x0F) | (data << 4); // sending lower nibble
-	RS_EN_Port |= (1<<EN);
+	Set_PIN_State(&RS_EN_Port, EN, HIGH);
 	_delay_us(1);
-	RS_EN_Port &= ~ (1<<EN);
+	Set_PIN_State(&RS_EN_Port, EN, LOW);
 	_delay_ms(2);
 }
 
 void LCD_DecrementCursor(void){
-    LCD_Send (0x10,MODE_COMMAND);		// Move Cursor to the left
+  LCD_Send (0x10,MODE_COMMAND);		// Move Cursor to the left
 	_delay_ms(1000);
 }
 
