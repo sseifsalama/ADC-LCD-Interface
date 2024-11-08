@@ -2,7 +2,7 @@
 #include "Lcd.h"
 #include <util/delay.h>
 
-void LCD_Send( unsigned char data,unsigned char mode ) {
+void LCD_Send(unsigned char data, unsigned char mode) {
     
     LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
     if (mode == MODE_DATA) {
@@ -25,43 +25,42 @@ void LCD_Send( unsigned char data,unsigned char mode ) {
 	_delay_ms(2);
 }
 
-void LCD_DecrementCursor(void){
-  LCD_Send (0x10,MODE_COMMAND);		// Move Cursor to the left
+void LCD_DecrementCursor(void) {
+  	LCD_Send (CURSOR_SHIFT_LEFT, MODE_COMMAND);	
 	_delay_ms(1000);
 }
 
 void LCD_Init (void) {
-	_delay_ms(20);			    /* LCD Power ON delay always >15ms */
+	_delay_ms(20);			    // LCD Power On delay
 
-	LCD_Send(0x02,MODE_COMMAND);		  // send for 4 bit initialization of LCD
-	LCD_Send(0x28,MODE_COMMAND);      // 2 line, 5*7 matrix in 4-bit mode
-	LCD_Send(0x0c,MODE_COMMAND);      // Display on cursor off
-	LCD_Send(0x06,MODE_COMMAND);      // Increment cursor (shift cursor to right)
-	LCD_Send(0x01,MODE_COMMAND);      // Clear display screen
+	LCD_Send(RETURN_CURSOR_HOME, MODE_COMMAND);
+	LCD_Send(LCD_4BIT_2LN, MODE_COMMAND);
+	LCD_Send(DISPLAY_ON_CURSOR_OFF, MODE_COMMAND);
+	LCD_Send(LCD_ENTRY_RIGHT, MODE_COMMAND);   
+	LCD_Send(CLEAR_DISPLAY, MODE_COMMAND);  
 
 	_delay_ms(2);
 }
 
 void LCD_String (char *str) {
 	int i;
-	for(i=0;str[i]!=0;i++)		/* Send each char of string till the NULL */
-	{
+	for(i=0;str[i]!=0;i++) {
 		LCD_Send (str[i],MODE_DATA);
 	}
 }
 
 void LCD_String_xy (char row, char pos, char *str) {
 	if (row == 0 && pos<16)
-	  LCD_Send((pos & 0x0F)|0x80,MODE_COMMAND);	                  /* Command of first row and required position<16 */
+	  LCD_Send((pos & 0x0F) | SET_CURSOR_LINE1, MODE_COMMAND);
 
 	else if (row == 1 && pos<16)
-	  LCD_Send((pos & 0x0F)|0xC0,MODE_COMMAND);	                  /* Command of first row and required position<16 */
+	  LCD_Send((pos & 0x0F) | SET_CURSOR_LINE2, MODE_COMMAND);
     
-	LCD_String(str);	                              	/* Call LCD string function */
+	LCD_String(str);	  
 }
 
 void LCD_Clear() {
-	LCD_Send (0x01,MODE_COMMAND);		// Clear display
+	LCD_Send(CLEAR_DISPLAY, MODE_COMMAND);		
 	_delay_ms(2);
-	LCD_Send (0x80,MODE_COMMAND);		// Cursor at home position
+	LCD_Send(SET_CURSOR_LINE1, MODE_COMMAND);
 }
