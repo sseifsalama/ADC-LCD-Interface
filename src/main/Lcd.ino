@@ -2,7 +2,7 @@
 #include "Lcd.h"
 #include <util/delay.h>
 
-void LCD_Send(unsigned char data, unsigned char mode) {
+void LCD_Send(unsigned char data, uint8_t mode) {
     
     LCD_Port = (LCD_Port & 0x0F) | (data & 0xF0); // sending upper nibble
     if (mode == MODE_DATA) {
@@ -49,7 +49,7 @@ void LCD_String (char *str) {
 	}
 }
 
-void LCD_String_xy (char row, char pos, char *str) {
+void LCD_String_xy (uint8_t row, uint8_t pos, char *str) {
 	if (row == 0 && pos<16)
 	  LCD_Send((pos & 0x0F) | SET_CURSOR_LINE1, MODE_COMMAND);
 

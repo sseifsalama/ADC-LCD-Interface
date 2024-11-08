@@ -7,7 +7,7 @@ void Adc_Init(void) {
     ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);
 }
 
-unsigned short Adc_ReadChannel(unsigned char ch) {
+uint16_t Adc_ReadChannel(uint8_t ch) {
     ch = ch & 0b00000111;  // AND operation with 7 to keep value of ch between 0 and 7
     ADMUX = (ADMUX & 0b11111000)|ch; // clears the bottom 3 bits before ORing
  

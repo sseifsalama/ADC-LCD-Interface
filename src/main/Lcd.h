@@ -37,10 +37,10 @@
 #define LCD_8BIT_1LN 0x30
 #define LCD_8BIT_2LN 0x38
 
-void LCD_Send (unsigned char char_data,unsigned char mode);
+void LCD_Send (unsigned char char_data, uint8_t mode);
 void LCD_Init (void);
 void LCD_String (char *str);
-void LCD_String_xy (char row, char pos, char *str);
+void LCD_String_xy (uint8_t row, uint8_t pos, char *str);
 void LCD_Clear();
 void LCD_DecrementCursor(void);
 #endif

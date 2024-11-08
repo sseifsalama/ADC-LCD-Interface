@@ -29,6 +29,6 @@
 
 void Adc_Init(void);
 
-unsigned short Adc_ReadChannel(unsigned char channel);
+uint16_t Adc_ReadChannel(uint8_t ch);
 
 #endif
