@@ -1,6 +1,7 @@
 #include "dio.h"
 #include "Lcd.h"
 #include <util/delay.h>
+// LCD function for sending command or data
 
 void LCD_Send(unsigned char data, uint8_t mode) {
     
@@ -25,10 +26,8 @@ void LCD_Send(unsigned char data, uint8_t mode) {
 	_delay_ms(2);
 }
 
-void LCD_DecrementCursor(void) {
-  	LCD_Send (CURSOR_SHIFT_LEFT, MODE_COMMAND);	
-	_delay_ms(1000);
-}
+
+// LCD Initialization function
 
 void LCD_Init (void) {
 	_delay_ms(20);			    // LCD Power On delay
@@ -42,12 +41,16 @@ void LCD_Init (void) {
 	_delay_ms(2);
 }
 
+// LCD function for printing string on the screen
+
 void LCD_String (char *str) {
 	int i;
 	for(i=0;str[i]!=0;i++) {
 		LCD_Send (str[i],MODE_DATA);
 	}
 }
+
+// LCD function for printing string on a specific position
 
 void LCD_String_xy (uint8_t row, uint8_t pos, char *str) {
 	if (row == 0 && pos<16)
@@ -58,6 +61,8 @@ void LCD_String_xy (uint8_t row, uint8_t pos, char *str) {
     
 	LCD_String(str);	  
 }
+
+// LCD function for clearing the screen
 
 void LCD_Clear() {
 	LCD_Send(CLEAR_DISPLAY, MODE_COMMAND);		

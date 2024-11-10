@@ -2,6 +2,7 @@
 #ifndef __Lcd__
 #define __Lcd__ 
 
+// LCD Modes: Command Mode and Data Mode
 #define MODE_DATA 1
 #define MODE_COMMAND 0
 
@@ -42,5 +43,4 @@ void LCD_Init (void);
 void LCD_String (char *str);
 void LCD_String_xy (uint8_t row, uint8_t pos, char *str);
 void LCD_Clear();
-void LCD_DecrementCursor(void);
 #endif
