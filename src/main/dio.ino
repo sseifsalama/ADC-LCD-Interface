@@ -18,10 +18,10 @@ void dio_init(void) {
     Set_PIN_Direction(&DDRB, COL3_PIN, DIO_INPUT_PULLUP);
 
     // PORTC dio init
-    Set_PIN_Direction(&DDRC, PC0, DIO_INPUT);
-    Set_PIN_Direction(&DDRC, PC1, DIO_INPUT);
+    Set_PIN_Direction(&DDRC, LDR_PIN, DIO_INPUT);
+    Set_PIN_Direction(&DDRC, POT_PIN, DIO_INPUT);
     Set_PIN_Direction(&DDRC, PC2, DIO_INPUT);
-    Set_PIN_Direction(&DDRC, PC3, DIO_OUTPUT);
+    Set_PIN_Direction(&DDRC, RED_LED, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, PC4, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, PC5, DIO_OUTPUT);
 }
