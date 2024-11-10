@@ -29,6 +29,7 @@
 
 void Adc_Init(void);
 
+uint16_t adc_reading;
 uint16_t Adc_ReadChannel(uint8_t ch);
 
 #endif
