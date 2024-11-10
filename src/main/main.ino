@@ -7,76 +7,114 @@
 #include "keypad.h"
 #include <stdlib.h>
 
-unsigned short adc_reading;
-unsigned char buffer[4];
-void init(){
+
+
+unsigned char buffer[5];  // Increased buffer size for safety
+unsigned int channel;
+
+void init() {
   dio_init();
   LCD_Init();
   UART_Init(9600);
   Adc_Init();
-
 }
+
+void display_limits(int llm, int hhm) {
+  char sllm[6];
+  char shhm[6];
+  
+  itoa(llm, sllm, 10);
+  itoa(hhm, shhm, 10);
+
+  LCD_String_xy(1, 0, "LLM:");
+  LCD_String_xy(1, 4, sllm);
+
+  LCD_String_xy(1, 9, "HHM:");
+  LCD_String_xy(1, 13, shhm);
+}
+
 int main(void) {
   init();
- 
- 
+  int llm = 200;
+  int hhm = 500;
+
   while (1) {
-   LCD_Send(0x0E,MODE_COMMAND);
-   LCD_String("Analog Sensors");
-   LCD_Send(0xC0,MODE_COMMAND);
-   LCD_String("1:POT  2:LDR");
-   Set_PIN_State(&PORTC,PC3,HIGH);
+    LCD_Send(0x0E, MODE_COMMAND);
+    LCD_String("Analog Sensors");
+    LCD_Send(0xC0, MODE_COMMAND);
+    LCD_String("1:POT  2:LDR");
 
-   while(key == '\0'){
-    key = keypad_get_key();
-   }
-   LCD_Clear();
-   if(key == 1){
-     adc_reading = Adc_ReadChannel(1);
-   }else if(key == 2){
-    adc_reading = Adc_ReadChannel(0);
-   }
-   while(key != 8){
-   //Low limit value to be changed by pushbutton
-   int llm = 321;
-   char sllm[5];
+    
 
-   //High limit value to be changed by pushbutton
-   int hhm = 700;
-   char shhm[5]; 
- 
-   LCD_String("Pot:");
-   LCD_String_xy(0,4,buffer);
+    while (key == '\0') {
+      key = keypad_get_key();
+    }
+    LCD_Clear();
 
+    
 
-   //Low limit print on LCD
-   LCD_String_xy(1,0,"LLM:");
-   itoa(llm, sllm, 10);
-   LCD_String_xy(1,4,sllm);
+    if (key == '1') {
 
-   //High limit print on LCD
-   LCD_String_xy(1,9,"HHM:");
-   itoa(hhm, shhm, 10);
-   LCD_String_xy(1,13,shhm);
-   
-   
-   itoa(adc_reading, buffer, 10);
-   if(adc_reading > 200 && adc_reading < 500){
-    LCD_String_xy(0,13,"OK");
-   }else{
-    LCD_String_xy(0,13,"NOK");
-   }
-   UART_SendString(buffer);
-   UART_SendChar('\n');
-   LCD_String_xy(0,4,buffer);
-   
-   
-   _delay_ms(300);
-   
-   LCD_Clear();
-   }
+      channel = 1;
+      LCD_String("POT:");
+
+    } else if (key == '2') {
+
+      channel = 0;
+      LCD_String("LDR:");
+
+    } 
+    
+    while (key != '9') {
+      
+      adc_reading = Adc_ReadChannel(channel);
+      // Display sensor reading
+      itoa(adc_reading, buffer, 10);
+    LCD_String_xy(0, 4, buffer);
+      
+     UART_SendString(buffer);
+     UART_SendString("\n");
+     //UART_SendChar('\n');
+     //_delay_ms(400);
+     if (key == '4'){
+      llm = llm - 5;
+      _delay_ms(50);
+     } else if(key == '5'){
+      llm = llm + 5;
+      _delay_ms(50);
+     } else if (key == '7'){
+      hhm = hhm - 5;
+      _delay_ms(50);
+     } else if(key == '8'){
+      hhm = hhm + 5;
+      _delay_ms(50);
+     }
+     
+      
+      // Display limits
+      display_limits(llm, hhm);
+
+      // Check adc_reading range and display status
+      if (adc_reading > llm && adc_reading < hhm) {
+        LCD_String_xy(0, 13, "OK");
+        Set_PIN_State(&PORTC, PC3, LOW);
+      } else {
+        LCD_String_xy(0, 13, "NOK");
+        Set_PIN_State(&PORTC, PC3, HIGH);
+      }
+
+      // Send reading over UART
+      //UART_SendString(buffer);
+      //UART_SendChar('\n');
+      // Delay for display refresh and update key
+      
+      key = keypad_get_key();
+      _delay_ms(100);
+      LCD_String_xy(0, 4,"    ");
+    
+    }
+    LCD_Clear();
+    key = '\0';  // Reset key for the next iteration
   }
-  /* End event loop */
- return (0);
+  return 0;
 }
-
