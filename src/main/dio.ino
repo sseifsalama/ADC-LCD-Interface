@@ -1,6 +1,7 @@
 #include "dio.h"
 
 void dio_init(void) {
+  
     // lcd dio init
     Set_PIN_Direction(&DDRD, EN, DIO_OUTPUT);
     Set_PIN_Direction(&DDRD, RS, DIO_OUTPUT);
@@ -24,6 +25,7 @@ void dio_init(void) {
     Set_PIN_Direction(&DDRC, RED_LED_PIN, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, PC4, DIO_OUTPUT);
     Set_PIN_Direction(&DDRC, PC5, DIO_OUTPUT);
+
 }
 
 void Set_PIN_Direction(volatile uint8_t* ddr, uint8_t pin, uint8_t direction) {
@@ -41,6 +43,7 @@ void Set_PIN_Direction(volatile uint8_t* ddr, uint8_t pin, uint8_t direction) {
 }
 
 void Set_PIN_State(volatile uint8_t* port, uint8_t pin, uint8_t state) {
+
     if (pin >= 8) return; // Invalid pin
     else if (state == HIGH) {
         *port |= (1 << pin);
@@ -48,9 +51,12 @@ void Set_PIN_State(volatile uint8_t* port, uint8_t pin, uint8_t state) {
     else if (state == LOW) {
         *port &= ~(1 << pin);
     }
+
 }
 
 uint8_t Is_Button_Pressed(volatile uint8_t* pin_reg, uint8_t pin) {
+
     if (pin >= 8) return; // Invalid pin
     return !(*pin_reg & (1 << pin)); // Return 1 if the pin is LOW (button pressed), 0 if HIGH (button not pressed)
+
 }
