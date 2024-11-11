@@ -55,6 +55,7 @@ int main(void) {
 
   while (1) {
 
+    UART_SendString("System Started");
     LCD_Send(DISPLAY_ON_CURSOR_OFF, MODE_COMMAND);
     LCD_String("Analog Sensors");
     LCD_Send(SET_CURSOR_LINE2, MODE_COMMAND);
@@ -70,11 +71,13 @@ int main(void) {
 
       channel = POT_PIN;
       LCD_String("POT:");
+      UART_SendString("Potentiometer Chosen");
 
     } else if (key == '2') {
 
       channel = LDR_PIN;
       LCD_String("LDR:");
+      UART_SendString("Light Dependent Resistor Chosen");
 
     } 
     
@@ -107,16 +110,20 @@ int main(void) {
 
         if(llm - 5 > 0){
           llm = llm - 5;
+          UART_SendString("Low Limit Decreased");
         }else{
           llm = 0;
+          UART_SendString("Low Limit cannot be Decreased");
         }
          _delay_ms(50);
 
      } else if(key == '5'){
 
         if(llm + 5 < hhm ){
-          llm = llm + 5;
-          
+          llm = llm +  5;
+          UART_SendString("Low Limit Increased");
+        }else{
+          UART_SendString("Low Limit cannot be more than High Limit");
         }
         _delay_ms(50);
 
@@ -124,15 +131,21 @@ int main(void) {
 
         if(hhm - 5 > llm){
           hhm = hhm - 5;
+          UART_SendString("High Limit Decreased");
+        }else{
+          UART_SendString("High Limit cannot be less than Low Limit");
         }
+
         _delay_ms(50);
 
      } else if(key == '8'){
-
+        
         if(hhm + 5 < 1025){
           hhm = hhm + 5;
+          UART_SendString("High Limit Increased");
         }else{
           hhm = 1025;
+          UART_SendString("High Limit cannot be Increased");
         }
         _delay_ms(50);
 
