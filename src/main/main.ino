@@ -96,7 +96,7 @@ int main(void) {
 
       // Check adc_reading range and display status
       if (adc_reading > llm && adc_reading < hhm) {
-        LCD_String_xy(0, 13, "OK");
+        LCD_String_xy(0, 13, " OK");
         Set_PIN_State(&PORTC, PC3, LOW);
       } else {
         LCD_String_xy(0, 13, "NOK");
