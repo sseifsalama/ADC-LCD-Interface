@@ -8,9 +8,14 @@
 #include <stdlib.h>
 
 
+#define SAMPLE_N0 20
+
 
 unsigned char buffer[5];  // Increased buffer size for safety
 unsigned int channel;
+
+unsigned char samples[SAMPLE_N0];
+uint8_t sample_index = 0;
 
 void init() {
   dio_init();
@@ -20,6 +25,7 @@ void init() {
 }
 
 void display_limits(int llm, int hhm) {
+
   char sllm[6];
   char shhm[6];
   
@@ -27,10 +33,12 @@ void display_limits(int llm, int hhm) {
   itoa(hhm, shhm, 10);
 
   LCD_String_xy(1, 0, "LLM:");
+  LCD_String_xy(1, 4,"    ");
   LCD_String_xy(1, 4, sllm);
 
-  LCD_String_xy(1, 9, "HHM:");
-  LCD_String_xy(1, 13, shhm);
+  LCD_String_xy(1, 8, "HHM:");
+  LCD_String_xy(1, 12,"    ");
+  LCD_String_xy(1, 12, shhm);
 }
 
 int main(void) {
@@ -51,8 +59,6 @@ int main(void) {
     }
     LCD_Clear();
 
-    
-
     if (key == '1') {
 
       channel = 1;
@@ -68,26 +74,58 @@ int main(void) {
     while (key != '9') {
       
       adc_reading = Adc_ReadChannel(channel);
+
+      if(channel == 0){
+        samples[sample_index] = adc_reading;
+        sample_index++;
+        if(sample_index > SAMPLE_N0 - 1) sample_index = 0;
+        unsigned short avg_ldr = 0;
+        for(uint8_t i = 0; i < SAMPLE_N0 - 1; i++){
+          avg_ldr += samples[i];
+        }
+        avg_ldr /= 20;
+        adc_reading = avg_ldr;
+      }
       // Display sensor reading
       itoa(adc_reading, buffer, 10);
-    LCD_String_xy(0, 4, buffer);
-      
-     UART_SendString(buffer);
-     UART_SendString("\n");
+      LCD_String_xy(0, 4, buffer);
+      UART_SendString(buffer);
+      UART_SendString("\n");
      //UART_SendChar('\n');
      //_delay_ms(400);
-     if (key == '4'){
-      llm = llm - 5;
-      _delay_ms(50);
+       if (key == '4'){
+
+        if(llm - 5 > 0){
+          llm = llm - 5;
+        }else{
+          llm = 0;
+        }
+         _delay_ms(50);
+
      } else if(key == '5'){
-      llm = llm + 5;
-      _delay_ms(50);
+
+        if(llm + 5 < hhm ){
+          llm = llm + 5;
+          
+        }
+        _delay_ms(50);
+
      } else if (key == '7'){
-      hhm = hhm - 5;
-      _delay_ms(50);
+
+        if(hhm - 5 > llm){
+          hhm = hhm - 5;
+        }
+        _delay_ms(50);
+
      } else if(key == '8'){
-      hhm = hhm + 5;
-      _delay_ms(50);
+
+        if(hhm + 5 < 1025){
+          hhm = hhm + 5;
+        }else{
+          hhm = 1025;
+        }
+        _delay_ms(50);
+
      }
      
       
@@ -109,7 +147,7 @@ int main(void) {
       // Delay for display refresh and update key
       
       key = keypad_get_key();
-      _delay_ms(100);
+      _delay_ms(1);
       LCD_String_xy(0, 4,"    ");
     
     }
