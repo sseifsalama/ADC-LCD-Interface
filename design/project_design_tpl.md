@@ -1,110 +1,115 @@
-# Detailed Design Document
+# ADC LCD Interface Design
 
-| **Author**              | `Authors Name`                                       |
+| **Author**              | `Seif Salama, Malik Babiker, Mostafa Hatem`                                       |
 |:------------------------|:-----------------------------------------------------|
 | **Status**              | `Draft/Inspection/Approved`                          |
 | **Version**             | `1.0`                                                |
-| **Date**                | `dd/mm/yyyy`                                         |
+| **Date**                | `11/11/2024`                                         |
 
 ## Introduction
 
-Provide an overview of the entire document:
-
-* Identify the system/product using any applicable names and/or version numbers.
+This report provides an overview and low-level design specification for an ADC LCD Interface, displaying analog sensor data (e.g., from a potentiometer or LDR) on an LCD. It includes configuration settings for upper (HHM) and lower (LLM) threshold limits, which can be adjusted through keypad input, with alerts triggered when readings exceed these limits. This design uses native C programming, without Arduino-based code or pre-developed libraries.
 
 ### Purpose
-This low-level design specification describes the internal structure and the functions of the software module. It describes the interaction, data structures, specific embedded constraints and background information about design. This specification is the basis for coding and is an input document for the corresponding module test specification. The terms Low-level design specification and module specification are used interchangeably in Valeo to refer to documents of this type.
+The purpose of this specification is to outline the internal structure, functional components, and embedded constraints for implementing the ADC LCD Interface module, forming the basis for coding and module testing.
 
 ### Scope
-Explanation:-
-* Give information on project context, where this document applies.
-* Also a reference for more project information can be given.
-* Classification for P2, P1, and P0. shall be given.
+The scope of this document includes:
+
+- Design and implementation of the ADC LCD Interface system.
+- Integration of analog sensors (e.g., potentiometer or LDR) and display of their values on an LCD screen.
+- User-configurable threshold limits via keypad input.
+- Alert mechanism to notify the user when sensor readings exceed the defined limits.
+
+This document serves as the reference for both coding and module testing, ensuring that the system works within the defined constraints and meets the project requirements.
+
+The module priority is classified as P2, indicating that it is a necessary part of the system but not critical for initial deployment.
 
 ### Defnitions and Acronym
 | **Abbreviation** |             **Meaning**             |
 |:----------------:|:-----------------------------------:|
-|      (RT)OS      |    (Real-Time) Operating System     |
-|       API        |    Application Program Interface    |
-|       CDD        |      Component Design Document      |
-|       HWI        |         HardWare Interfaces         |
-|       NVM        |         Non Volatile Memory         |
-|       SRS        | Software Requirements Specification |
+| ADC              | Analog-to-Digital Converter              |
+| UART             | Universal Asynchronous Receiver Transmitter |
+| LCD              | Liquid Crystal Display                  |
+| POT              | Potentiometer                            |
+| LDR              | Light Dependent Resistor                |
 
 ## Architectural Overview
 
-This section describes where this module resides in the context of the software architecture
+This section describes where this module resides in the context of the embedded system's software architecture
 ```plantuml
 @startuml
-rectangle StaticArchi #orange {
-    rectangle System #orange {
-        rectangle EcuM
-        rectangle BAT
-        rectangle VEM
-        rectangle WdgM
-    }
-    rectangle Config #lightgreen {
-        rectangle CAR #lightgreen
-        rectangle CFG #lightgreen
-    }
-
-    rectangle BSW_Abstraction_Layer #skyblue {
-            rectangle IPC
-            rectangle DMA
-            rectangle DSI
-            rectangle FSM
-    }
+rectangle ADC_LCD_System {
+    rectangle ADC_Module
+    rectangle LCD_Module
+    rectangle UART_Module
+    rectangle Keypad_Module
+    rectangle Control_Logic
 }
 @enduml
-
 ```
 
 ### Assumptions & Constraints
-Indicate constraints of the low level design and any assumptions appropriate for the design.
+
+1. This system assumes stable input from sensors, using averaging to reduce noise.
+2. The LCD display has limited character space, requiring concise data representation.
+3. The module operates within the 8-bit MCU memory constraints and processing capacity.
 
 ```plantuml
 @startuml
-(*) --> init
---> configure
-if value > 15
-  --> increment value
-  --> (*)
+(*) --> [Init]
+--> [Configure ADC, UART, LCD]
+if "Key = '1' or '2'" then
+  --> [Set Channel]
 else
-  --> decrement value
-  --> (*)
+  --> [Await Key Input]
 endif
 @enduml
 ```
 
 ## Functional Description
-The following chapter describes the software functionality.  The following is a list of suggested sections to be considered for inclusion.
+The ADC LCD Interface reads analog values from sensors connected to specified ADC channels. Data is sampled (for noise reduction) and displayed on an LCD. Threshold limits for sensor readings can be adjusted using a keypad, and UART communication sends real-time data to an external monitor.
 
 ## Implementation of the Module
 This chapter discusses the detailed design of the module.
 
+- ADC Initialization: Initializes ADC for specified channels.
+- LCD Display Functions: Displays sensor type, reading, and threshold limits.
+- UART Communication: Transmits real-time sensor data over UART.
+- Keypad Input Handling: Adjusts LLM/HHM thresholds.
+
 ## Integration and Configuration
 ### Static Files
-Typically a module consists of C and H files but other file types may exist. List all files that form this module
 
 | File name | Contents                             |
 |-----------|--------------------------------------|
-| abc_xxx.c | Source code file, add detail         |
-| abc.h     | Export Interface file                |
-| abci.h    | Import and Module Configuration file |
+| main.ino | Source code for main application   |
+| dio.ino     | Source code for DIO functions  |
+| dio.h    | Header file for DIO functions |
+| uart.ino    | Source code for UART functions |
+| uart.h    | Header file for UART functions |
+| adc.ino    | Source code for ADC functions |
+| adc.h    | Header file for ADC functions |
+| Lcd.ino    | Source code for LCD functions |
+| Lcd.h    | Header file for LCD functions |
+| keypad.ino    | Source code for Keypad functions |
+| keypad.h    | Header file for Keypad functions |
+
 ### Include Structure
 
-If there is a complex file structure e.g. more than one c-file or more than two h-files use a diagram to explain the relationship between the source and dependent include files.
+The following diagram shows dependencies upon files in the module.
 
 ```plantuml
 @startuml
-package "pkg" {
-    [ABC_Init.c].>[ADC.h] : includes
-    [ABC_Init.c]...>[ABCi.h]
-    [ABC_Task.c]...>[ADC.h]
-    [ABC_Task.c]...>[ABCi.h] : includes
-    interface Interf3
-    note left of ABC_Task.c: A top note
-    ABC_Init.c ..> Interf3 : internal interface
+package "ADC_LCD_Module" {
+    [adc.c] --> [adc.h]
+    [lcd.c] --> [lcd.h]
+    [uart.c] --> [uart.h]
+    [keypad.c] --> [keypad.h]
+    [main.c] --> [adc.h]
+    [main.c] --> [lcd.h]
+    [main.c] --> [uart.h]
+    [main.c] --> [keypad.h]
 }
 @enduml
 ```
@@ -113,4 +118,7 @@ package "pkg" {
 Any required hardware/software or system configuration that can be adjusted a header file shall be detailed in this section. This can be placed in the table below.
 | Name | Value range | Description |
 |------|-------------|-------------|
-|      |             |             |
+| LLM           | 0 - 1023        | Lower threshold limit for sensor readings     |
+| HHM           | 0 - 1023        | Upper threshold limit for sensor readings     |
+| UART_BaudRate | 9600            | Baud rate for UART communication              |
+| SAMPLE_N0     | 20              | Number of samples for averaging sensor data   |
