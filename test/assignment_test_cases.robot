@@ -239,7 +239,71 @@ Test Case 7: Verify LDR Lower Limit Change
      Verify that STATUS in "POT:{POT_VALUE} {STATUS}" shows "NOK"
      Verify that RED LED is turned on   
 
-Test Case 9:
+Test Case 9: Verify Lower Limit Logic
+    [Documentation]    Ensuring lower limit increases and decreases as expected using keypad
+    # Arrange (Set up the test environment)
+    [Setup steps]
+    Connect Arduino to PC
+    Open Serial Monitor
+    Press 1 on Keypad
+
+    # Act (Perform the action to be tested)
+    [Action steps]
+    Press 4 repeatedly until LLM reaches limit
+    Press 5 repeatedly until LLM reaches limit
+   
+    
+
+    # Assert (Verify the expected outcome)
+    [Assertion steps]
+    After pressing 4 repeatedly:
+     While LLM > 0:
+      Verify that LLM_VALUE in "LLM:{LLM_VALUE}" keeps decreasing by decrements of 5
+      Verify that the Serial Monitor prints "Low Limit Decreased" corresponding to number of presses
+     While LLM = 0:
+      Verify that LLM_VALUE in "LLM:{LLM_VALUE}" stops decreasing.
+      Verify that the Serial Monitor prints "Low Limit cannot be decreased" corresponding to number of presses
+    After pressing 5 repeatedly:
+     While LLM + 5 < HHM:
+      Verify that LLM_VALUE in "LLM:{LLM_VALUE}" keeps increasing by increments of 5
+      Verify that the Serial Monitor prints "Low Limit Increased" corresponding to number of presses
+     While LLM + 5 >= HHM:
+      Verify that LLM_VALUE in "LLM:{LLM_VALUE}" stops increasing.
+      Verify that the Serial Monitor prints "Low Limit cannot be more than High Limit" corresponding to number of presses
+
+Test Case 10: Verify Higher Limit Logic
+    [Documentation]    Ensuring lower limit increases and decreases as expected using keypad
+    # Arrange (Set up the test environment)
+    [Setup steps]
+    Connect Arduino to PC
+    Open Serial Monitor
+    Press 1 on Keypad
+
+    # Act (Perform the action to be tested)
+    [Action steps]
+    Press 7 repeatedly until LLM reaches limit
+    Press 8 repeatedly until LLM reaches limit
+   
+    
+
+    # Assert (Verify the expected outcome)
+    [Assertion steps]
+    After pressing 7 repeatedly:
+     While HHM-5 > LLM:
+      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" keeps decreasing by decrements of 5
+      Verify that the Serial Monitor prints "High Limit Decreased" corresponding to number of presses
+     While HHM - 5 <= LLM:
+      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" stops decreasing.
+      Verify that the Serial Monitor prints "High Limit cannot be less than Low Limit" corresponding to number of presses
+    After pressing 8 repeatedly:
+     While HHM < 1025:
+      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" keeps increasing by increments of 5
+      Verify that the Serial Monitor prints "High Limit Increased" corresponding to number of presses
+     While HHM = 1025:
+      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" stops increasing.
+      Verify that the Serial Monitor prints "High Limit cannot be increased" corresponding to number of presses
+
+Test Case 11: 
      
 
 
