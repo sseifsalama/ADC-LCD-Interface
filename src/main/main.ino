@@ -15,17 +15,18 @@ unsigned char buffer[5];  // Increased buffer size for safety
 
 uint8_t channel; // Variable for choosing a channel
 
-unsigned char samples[SAMPLE_N0];
-uint8_t sample_index = 0;
+unsigned char samples[SAMPLE_N0]; // Array to store LDR values
+uint8_t sample_index = 0; // Index of Samples Array
 
 
+// Function used to Display the limits on the LCD
 
 void display_limits(int llm, int hhm) {
 
   char sllm[6];
   char shhm[6];
   
-  itoa(llm, sllm, 10);
+  itoa(llm, sllm, 10); // Converting
   itoa(hhm, shhm, 10);
 
   LCD_String_xy(1, 0, "LLM:");
@@ -55,13 +56,13 @@ int main(void) {
 
   while (1) {
 
-    UART_SendString("System Started");
+    UART_SendString("System Started\n");
     LCD_Send(DISPLAY_ON_CURSOR_OFF, MODE_COMMAND);
     LCD_String("Analog Sensors");
     LCD_Send(SET_CURSOR_LINE2, MODE_COMMAND);
     LCD_String("1:POT  2:LDR"); 
 
-    while (key == '\0') { // Wait for a key to get pressed
+    while (key != '1' && key != '2') { // Wait for a key to get pressed
       key = keypad_get_key();
     }
 
@@ -71,13 +72,13 @@ int main(void) {
 
       channel = POT_PIN;
       LCD_String("POT:");
-      UART_SendString("Potentiometer Chosen");
+      UART_SendString("Potentiometer Chosen\n");
 
     } else if (key == '2') {
 
       channel = LDR_PIN;
       LCD_String("LDR:");
-      UART_SendString("Light Dependent Resistor Chosen");
+      UART_SendString("Light Dependent Resistor Chosen\n");
 
     } 
     
@@ -103,17 +104,15 @@ int main(void) {
 
       itoa(adc_reading, buffer, 10);
       LCD_String_xy(0, 4, buffer);
-      UART_SendString(buffer);
-      UART_SendString("\n");
    
        if (key == '4'){
 
         if(llm - 5 > 0){
           llm = llm - 5;
-          UART_SendString("Low Limit Decreased");
+          UART_SendString("Low Limit Decreased\n");
         }else{
           llm = 0;
-          UART_SendString("Low Limit cannot be Decreased");
+          UART_SendString("Low Limit cannot be Decreased\n");
         }
          _delay_ms(50);
 
@@ -121,9 +120,9 @@ int main(void) {
 
         if(llm + 5 < hhm ){
           llm = llm +  5;
-          UART_SendString("Low Limit Increased");
+          UART_SendString("Low Limit Increased\n");
         }else{
-          UART_SendString("Low Limit cannot be more than High Limit");
+          UART_SendString("Low Limit cannot be more than High Limit\n");
         }
         _delay_ms(50);
 
@@ -131,9 +130,9 @@ int main(void) {
 
         if(hhm - 5 > llm){
           hhm = hhm - 5;
-          UART_SendString("High Limit Decreased");
+          UART_SendString("High Limit Decreased\n");
         }else{
-          UART_SendString("High Limit cannot be less than Low Limit");
+          UART_SendString("High Limit cannot be less than Low Limit\n");
         }
 
         _delay_ms(50);
@@ -142,10 +141,10 @@ int main(void) {
         
         if(hhm + 5 < 1025){
           hhm = hhm + 5;
-          UART_SendString("High Limit Increased");
+          UART_SendString("High Limit Increased\n");
         }else{
           hhm = 1025;
-          UART_SendString("High Limit cannot be Increased");
+          UART_SendString("High Limit cannot be Increased\n");
         }
         _delay_ms(50);
 
