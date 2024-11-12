@@ -18,12 +18,12 @@ Test Case 1: Verify Arduino Startup Sequence
 
 Test Case 2: Verify Menu Navigation
     [Documentation]    Ensuring that the keypad allows seamless navigation between options
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Observe LCD and Serial Monitor
     Press 1 on the Keypad
@@ -31,7 +31,7 @@ Test Case 2: Verify Menu Navigation
     Press 2 on the Keypad
     Press 9 on the Keypad
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After pressing 1 on the Keypad:
       Verify LCD displays the expected menu | Expected Menu = "POT:{POT_VALUE} {STATUS}\n LLM:{LLM_VALUE} HHM:{HHM_VALUE}" 
@@ -48,19 +48,19 @@ Test Case 2: Verify Menu Navigation
 
 Test Case 3: Verify Potentiometer Values and Status
     [Documentation]    Ensuring Potentiometer value is displayed correctly and verifying correct status changes
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 1 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Rotate Potentiometer from minimum to maximum and to minimum again
     Observe Changes on LCD and RED LED
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After rotating potentiometer:
      Verify that POT_VALUE in "POT:{POT_VALUE}" is updating correctly, where new value overwrites old value
@@ -76,13 +76,13 @@ Test Case 3: Verify Potentiometer Values and Status
 
 Test Case 4: Verify Potentiometer Lower Limit Change
     [Documentation]    Ensuring Potentiometer lower limit is changed correctly and status is updated accordingly
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 1 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Press 5 on Keypad
     Rotate Potentiometer until POT_VALUE = LLM - 2
@@ -91,7 +91,7 @@ Test Case 4: Verify Potentiometer Lower Limit Change
    
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After Pressing 5 on Keypad:
      Verify that LLM_Value in "LLM:{LLM_VALUE}" has increased by 5
@@ -110,13 +110,13 @@ Test Case 4: Verify Potentiometer Lower Limit Change
 
 Test Case 5: Verify Potentiometer Higher Limit Change
     [Documentation]    Ensuring Potentiometer higher limit is changed correctly and status is updated accordingly
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 1 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Press 7 on Keypad
     Rotate Potentiometer until POT_VALUE = HHM + 2
@@ -124,8 +124,6 @@ Test Case 5: Verify Potentiometer Higher Limit Change
     Rotate Potentiometer until POT_VALUE = HHM + 2
    
     
-
-    # Assert (Verify the expected outcome)
     [Assertion steps]
     After Pressing 7 on Keypad:
      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" has decreased by 5
@@ -144,20 +142,20 @@ Test Case 5: Verify Potentiometer Higher Limit Change
 
 Test Case 6: Verify LDR values and status
     [Documentation]    Ensuring LDR value is displayed correctly and verifying correct status changes
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 2 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Expose LDR to low light intensity conditions until LDR_VALUE < LLM
     Expose LDR to medium light intensity conditions until LDR_VALUE > LLM and LDR_VALUE < HHM
     Expose LDR to high light intensity conditions until LDR_VALUE > HHM
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After changing light intensity conditions:
      Verify that LDR_VALUE in "LDR:{LDR_VALUE}" is updating correctly, where new value overwrites old value
@@ -173,13 +171,13 @@ Test Case 6: Verify LDR values and status
 
 Test Case 7: Verify LDR Lower Limit Change
     [Documentation]    Ensuring LDR lower limit is changed correctly and status is updated accordingly
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 2 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Press 5 on Keypad 10 times
     Reduce light intensity until LDR_VALUE < LLM and LDR_VALUE > LLM - 50
@@ -188,7 +186,7 @@ Test Case 7: Verify LDR Lower Limit Change
    
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After Pressing 5 on Keypad 10 times:
      Verify that LLM_Value in "LLM:{LLM_VALUE}" has increased by 50
@@ -207,13 +205,13 @@ Test Case 7: Verify LDR Lower Limit Change
 
  Test Case 8: Verify LDR Higher Limit Change
     [Documentation]   Ensuring LDR higher limit is changed correctly and status is updated accordingly
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 2 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Press 7 on Keypad 10 times
     Increase light intensity conditions until LDR_VALUE > HHM and LDR_VALUE < HHM + 50
@@ -222,7 +220,7 @@ Test Case 7: Verify LDR Lower Limit Change
    
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After Pressing 7 on Keypad 10 times:
      Verify that HHM_VALUE in "HHM:{HHM_VALUE}" has decreased by 50
@@ -241,20 +239,18 @@ Test Case 7: Verify LDR Lower Limit Change
 
 Test Case 9: Verify Lower Limit Logic
     [Documentation]    Ensuring lower limit increases and decreases as expected using keypad
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 1 on Keypad
 
-    # Act (Perform the action to be tested)
+    
     [Action steps]
     Press 4 repeatedly until LLM reaches limit
     Press 5 repeatedly until LLM reaches limit
    
     
-
-    # Assert (Verify the expected outcome)
     [Assertion steps]
     After pressing 4 repeatedly:
      While LLM > 0:
@@ -273,20 +269,20 @@ Test Case 9: Verify Lower Limit Logic
 
 Test Case 10: Verify Higher Limit Logic
     [Documentation]    Ensuring lower limit increases and decreases as expected using keypad
-    # Arrange (Set up the test environment)
+    
     [Setup steps]
     Connect Arduino to PC
     Open Serial Monitor
     Press 1 on Keypad
 
-    # Act (Perform the action to be tested)
+   
     [Action steps]
     Press 7 repeatedly until LLM reaches limit
     Press 8 repeatedly until LLM reaches limit
    
     
 
-    # Assert (Verify the expected outcome)
+    
     [Assertion steps]
     After pressing 7 repeatedly:
      While HHM-5 > LLM:
@@ -303,7 +299,57 @@ Test Case 10: Verify Higher Limit Logic
       Verify that HHM_VALUE in "HHM:{HHM_VALUE}" stops increasing.
       Verify that the Serial Monitor prints "High Limit cannot be increased" corresponding to number of presses
 
-Test Case 11: 
+Test Case 11: Verify No Action on Invalid Keypad Press in Main Menu
+    [Documentation]  Ensuring that pressing any key other than 1 or 2 while in the main menu does not produce any response on the LCD or Serial Monitor. 
+  
+    [Setup steps]
+    Connect Arduino to PC
+    Open Serial Monitor
+
+ 
+    [Action steps]
+    Press 3 on the Keypad.
+    Press 4 on the Keypad.
+    Press 5 on the Keypad.
+    Press 6 on the Keypad. 
+    Press 7 on the Keypad.
+    Press 8 on the Keypad.
+    Press 9 on the Keypad.
+    Press 0 on the Keypad.
+
+   
+    [Assertion steps]
+    Verify that the LCD display does not change and continues to show the main menu: "Analog Sensors\n 1:POT 2:LDR"
+    Verify that the Serial Monitor does not print any additional output in response to each invalid key press.
+
+Test Case 12: Verify Continuous Change of Limit While Holding Limits Button in Potentiometer Menu
+    [Documentation]  Ensuring that holding down the limits button in the potentiometer menu continuously changes the limit until the button is released.
+
+    [Setup steps]    
+    Connect Arduino to PC.
+    Open Serial Monitor.
+    Press 1 on the Keypad to navigate to the potentiometer menu.
+
+    [Action steps]
+    Press and hold 4 on keypad
+    Release the button 4 after several seconds
+    Press and hold 5 on keypad
+    Release the button 5 after several seconds
+
+    [Assertion steps]
+    While holding the button 4:
+     Verify that the LLM_VALUE displayed in "LLM:{LLM_VALUE}" on the LCD continuously decreases by increments of 5.
+     Verify that the Serial Monitor prints "Low Limit Decreased" for each decrement as the button is held.
+    After releasing the button 4: 
+     Confirm that the limit value in "LLM:{LLM_VALUE}" stops decreasing immediately.
+     Ensure no further output is displayed on the Serial Monitor related to limit changes.
+    While holding the button 5:
+     Verify that the LLM_VALUE displayed in "LLM:{LLM_VALUE}" on the LCD continuously increases by increments of 5.
+     Verify that the Serial Monitor prints "Low Limit Decreased" for each decrement as the button is held.
+    After releasing the button 5: 
+     Confirm that the limit value in "LLM:{LLM_VALUE}" stops increasing immediately.
+     Ensure no further output is displayed on the Serial Monitor related to limit changes.
+
      
 
 
