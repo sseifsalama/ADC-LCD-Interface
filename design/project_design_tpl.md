@@ -99,11 +99,31 @@ The ADC LCD Interface reads analog values from sensors connected to specified AD
 ## Implementation of the Module
 This chapter discusses the detailed design of the module.
 
-- ADC Initialization: Initializes ADC for specified channels.
-- LCD Display Functions: Displays sensor type, reading, and threshold limits.
-- UART Communication: Transmits real-time sensor data over UART.
-- Keypad Input Handling: Adjusts LLM/HHM thresholds.
-
+- LCD:
+Initialize the LCD with the appropriate commands.
+Set up the data and control pins for communication.
+Clear the display and set the cursor position.
+- Keypad:
+Configure the keypad's rows and columns as input pins.
+Use a scanning technique to detect keypresses.
+- ADC:
+Configure the ADC module with the desired resolution and sampling rate.
+Select the analog input channel to be read.
+- UART:
+Configure the UART module with the baud rate, parity, stop bits, and data bits.
+- DIO:
+Configure the desired pins as input or output.
+Set the direction and initial state of each pin.
+- Main Loop:
+Read Input:
+Read keypresses from the keypad.
+Read analog values from the ADC.
+Process Data:
+Process the input data as required (e.g., calculate values, make decisions).
+Update Output:
+Display information on the LCD.
+Control devices connected to the DIO pins.
+Transmit data over the UART.
 ## Integration and Configuration
 ### Static Files
 

@@ -11,6 +11,6 @@ LED Diode 5 mm,Light Indicators,https://shorturl.at/TREZv,Future Electronics,1,1
 Crystal Oscillator,	16MHz,No datasheet available, Amazon, 1, 45, 45
 Voltage Regulator,LM317T, https://www.ti.com/lit/ds/symlink/lm317-n.pdf?ts=1731508289063&ref_url=https%253A%252F%252Fwww.mouser.se%252F, UGE Electronics, 1, 10, 10
 22pF Capacitors, Used with crystal oscillator, No datasheet, UGE Electronics, 4, 0.5, 2
-FTDI Adaptor, communication with Atmega328P, https://ftdichip.com/wp-content/uploads/2020/07/AN_107_AdvancedDriverOptions_AN_000073.pdf, Future Electronics, 1, 140(exculed from total as it is one time use), 140
+FTDI Adaptor, communication with Atmega328P, https://ftdichip.com/wp-content/uploads/2020/07/AN_107_AdvancedDriverOptions_AN_000073.pdf, Future Electronics, 1, 140 (exculed from total as it is one time use), 140
 Keypad 4x4,Number Keypad,https://shorturl.at/D55c0,Micro Ohm,1,30,30
 ,,,,,Total Budget,664 (excluding FTDI Adaptor)
