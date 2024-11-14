@@ -39,13 +39,33 @@ The module priority is classified as P2, indicating that it is a necessary part 
 This section describes where this module resides in the context of the embedded system's software architecture
 ```plantuml
 @startuml
-rectangle ADC_LCD_System {
-    rectangle ADC_Module
-    rectangle LCD_Module
-    rectangle UART_Module
-    rectangle Keypad_Module
-    rectangle Control_Logic
+node "APP" {   
 }
+node "UART" { 
+}
+node "Keypad"{
+}
+node "LCD"{
+}
+node "DIO"{
+}
+node "ADC"{
+}
+node "Mircocontroller"{
+}
+node "DIO"{
+}
+
+APP --> UART
+APP <-- Keypad
+APP --> LCD
+UART --> Mircocontroller
+APP <-- ADC
+ADC <-- Mircocontroller
+DIO <--> Mircocontroller
+LCD --> DIO
+Keypad --> DIO
+
 @enduml
 ```
 
@@ -57,12 +77,18 @@ rectangle ADC_LCD_System {
 
 ```plantuml
 @startuml
-(*) --> [Init]
---> [Configure ADC, UART, LCD]
-if "Key = '1' or '2'" then
-  --> [Set Channel]
+(*) --> Init
+Init --> ConfigureADC_UART_LCD
+ConfigureADC_UART_LCD --> AwaitKeyInput
+AwaitKeyInput --> SetChannel
+SetChannel --> If "Key = 1" then
+    If --> DisplayPotValue
+
+else if "Key = 2" then
+    If --> DisplayLDRValue
+
 else
-  --> [Await Key Input]
+    If --> AwaitKeyInput
 endif
 @enduml
 ```
