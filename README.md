@@ -42,3 +42,6 @@ Test Cases are developed in Robot Framework Test steps:
 
 ## 6. Design
 [Design_Report](./design/project_design_tpl.md)
+
+## 7. Circuit Schematic
+![Schematic](design/ADC_LCD_Interface_Circuit.png)
